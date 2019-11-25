@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>To Do List</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<!-- 
+  The BA on Team B said that a search feature doesn't add any value to the MVP 
+  so we're creating an app that displays a plain list.
+  
+  The Devs on Team B are a bit lazy so they just threw a bunch of loose functions
+  into the script.
+ -->
+
+<body>
+  <ul></ul>
+</body>
+
+<script>
+  // They're so lazy that they initialized the app with an xhr request in here.
+  // They should know that this causes a race condition, but lets just ignore that for now.
+  // Also, this is a list meant to be used as a local store of the notes.
+  var _todoList = [{ title: "Demo element", description: "Demo description" }];
+  var clickSubscribers = [];
+
+  window.onload = function () { refreshTodoList(); };
+
+  /* 
+   * A function to update a single element in the _todoList 
+   * ...
+   * It can cause sync problems between whats stored in the frontend and the backend
+   * ...
+   */
+  function updateTodoElement(todo) {
+    indexToUpdate = _todoList.map(function (element) { return element.title }).indexOf(todo.title);
+    if (indexToUpdate >= 0) {
+      _todoList[indexToUpdate] = todo;
+    } else {
+      _todoList.push(todo);
+    }
+  }
+
+  /*
+   * Clears the list from the DOM and then draws it again
+   */
+  function refreshTodoList() {
+    var listRootElement = document.querySelector("ul");
+    listRootElement.innerHTML = "";
+    _todoList.forEach(function (todo) {
+      var li = document.createElement("li");
+      li.innerText = todo.title;
+      li.addEventListener("click", onLiClick);
+      listRootElement.appendChild(li);
+    });
+  }
+
+  /*
+   * A subscribe function, but they tried to handle it as an event.
+   */
+  function onTodoClick(cb) {
+    clickSubscribers.push(cb);
+  }
+
+  /*
+   * Recovers the details of the clicked note and sends them to the subscribers of the app.
+   */
+  function onLiClick(e) {
+    clickedTodo = _todoList.find(function (todo) {
+      return e.target.innerText == todo.title;
+    });
+    clickSubscribers.forEach(function (cbFunction) {
+      cbFunction(clickedTodo);
+    });
+  }
+</script>
+
+</html>

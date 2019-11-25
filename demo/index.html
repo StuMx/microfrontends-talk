@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mircrofrontend demo</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<!-- 
+  Team C has the task to make everything work together.
+  Team C decided to use iframes so the other teams don't have to make adjustments
+  to their already existing apps.
+  Team C also added a cool header, just in case the user forgets the app name.
+ -->
+
+<body>
+  <h1>Super Notepad 9000 Ultra</h1>
+  <iframe src="./editor/index.html" id="editorFrame" frameborder="0"></iframe>
+  <iframe src="./list/index.html" id="listFrame" frameborder="0"></iframe>
+</body>
+
+<script>
+  var editorFrame = document.getElementById("editorFrame");
+  var listFrame = document.getElementById("listFrame");
+
+  // Subscribe to the Editor MFE Pub
+  editorFrame.onload = function () {
+    editorFrame.contentWindow.task.subscribe(addItemToListFrame);
+  }
+
+  // Subscribe to the List MFE Pub
+  listFrame.onload = function () {
+    listFrame.contentWindow.onTodoClick(loadTodoFromList);
+  }
+
+  // Sends a note to be displayed in the List MFE
+  function addItemToListFrame(item) {
+    listFrame.contentWindow.updateTodoElement(item.get());
+    listFrame.contentWindow.refreshTodoList();
+  }
+
+  // Sends a note to be displayed in the Editor MFE
+  function loadTodoFromList(item) {
+    editorFrame.contentWindow.task.set(item);
+  }
+
+</script>
+
+</html>
