@@ -12,7 +12,7 @@ https://martinfowler.com/articles/micro-frontends.html
 Amit Kothari. *"What is a micro frontend?".*
 https://hub.packtpub.com/what-micro-frontend/
 
-Matthias Laug ThoughtWorks. *"Micro-Frontends".*
+Matthias Laug. *"Micro-Frontends".*
 https://www.youtube.com/watch?v=Bnmy5zMY14s
 
 ## Tools reference
