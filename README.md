@@ -4,29 +4,29 @@ In this repo you will find all the resources for my Microfrontends talk.
 It is an approach to develop web applications as a composition of small frontend apps representing a business subdomain
 Think of it as a server rack where you place an app in each slot.
 
-#Useful Links
+# Useful Links
 ## More info
-Cam Jackson. "Micro Frontends".
+Cam Jackson. *"Micro Frontends".*.
 https://martinfowler.com/articles/micro-frontends.html
 
-Amit Kothari. "What is a micro frontend?"
+Amit Kothari. *"What is a micro frontend?".*
 https://hub.packtpub.com/what-micro-frontend/
 
-Micro-Frontends. "Matthias Laug ThoughtWorks".
+Micro-Frontends. *"Matthias Laug ThoughtWorks".*
 https://www.youtube.com/watch?v=Bnmy5zMY14s
 
 ## Tools reference
-Web Components
+**Web Components**
 https://developer.mozilla.org/en-US/docs/Web/Web_Components#Tutorials
 
-single-spa, a javascript framework for front-end microservices
+**single-spa, a javascript framework for front-end microservices**
 https://single-spa.js.org/
 
-Open components
+**Open components**
 https://opencomponents.github.io/
 
-Redux
+**Redux**
 https://redux.js.org/
 
-NgRx
+**NgRx**
 https://ngrx.io/
