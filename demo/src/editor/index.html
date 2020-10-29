@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>To Do Editor</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<!-- 
+  The team decided to keep things simple. That means only two fields: one for the title 
+  and another for the actual note.
+  
+  Also it was decided to handle the code through 3 objects:
+    1. To be used as public API.
+    2. To handle all the business logic.
+    3. To wire the UI to the business object.
+ -->
+
+<body>
+  <div>
+    <input type="text" name="noteTitle" id="inputNoteTitle" placeholder="What to do?">
+  </div>
+  <div>
+    <textarea type="text" name="noteDescription" id="inputNoteDescription" placeholder="Give me the deails!"></textarea>
+  </div>
+  <div>
+    <input type="button" value="Save!" id="buttonSave">
+    <input type="button" value="Clear" id="buttonClear">
+  </div>
+</body>
+
+<script>
+
+  /*
+   *  1. Public API
+   *  An object that allows the MFE to be used from somewhere else,
+   *  however the functionality of the MFE shouldn't depend on it's use.
+   */
+  var task = {
+    get: function () {
+      return {
+        title: _task.title,
+        description: _task.description
+      }
+    },
+    set: function (task) {
+      _task.title = task.title;
+      _task.description = task.description;
+    },
+    subscribe: function (cb) {
+      _task.subscribers.push(cb);
+    },
+  };
+
+  /* 
+   * 2. An object that encapsulates the MFE logic.   
+   * 
+   * All the magic happens at the save function, the rest is a poor implementation
+   * of the Pub-Sub pattern and encapsulation.
+   */
+  var _task = {
+    self: this,
+    subscribers: [],
+    get title() { return this._title; },
+    set title(value) { this._title = value; noteTitleElement.value = value },
+    get description() { return this._description },
+    set description(value) { this._description = value; noteDescriptionElement.value = value },
+    save: function (title, description) {
+      this.title = title;
+      this.description = description;
+      // Imagine that the next line actually does something.
+      console.log("Posting note to the backend...");
+      this.publish();
+    },
+    publish: function () {
+      this.subscribers.forEach(function (cbFunction) {
+        cbFunction(task);
+      });
+    }
+  };
+
+  /*
+   * 3. An object to encapsulate the UI interactions.
+   * Pass values to the _task object, clear fields on save and stuff
+   */
+  var uiEvents = {
+    clear: function () {
+      _task.title = "";
+      _task.description = "";
+    },
+    save: function () {
+      _task.title = noteTitleElement.value;
+      _task.description = noteDescriptionElement.value;
+      _task.save(noteTitleElement.value, noteDescriptionElement.value);
+      _task.publish();
+      uiEvents.clear();
+    },
+  }
+
+
+  /*
+   *  Setup stuff
+   */
+  var noteTitleElement = document.getElementById("inputNoteTitle");
+  var noteDescriptionElement = document.getElementById("inputNoteDescription");
+  document.getElementById("buttonSave").addEventListener("click", uiEvents.save);
+  document.getElementById("buttonClear").addEventListener("click", uiEvents.clear);
+
+</script>
+
+</html>

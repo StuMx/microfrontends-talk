@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mircrofrontend demo</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<!-- 
+  The team decided that the app entry point sould be limited to draw things in its place
+  and wire the inputs and outputs of each MFE so they work nicely together
+ -->
+
+<body>
+  <h1>My ToDo App</h1>
+  <iframe src="./editor/index.html" id="editorFrame" frameborder="0"></iframe>
+  <iframe src="./list/index.html" id="listFrame" frameborder="0"></iframe>
+</body>
+
+<script>
+  var editorFrame = document.getElementById("editorFrame");
+  var listFrame = document.getElementById("listFrame");
+
+  // Subscribe to the Editor MFE
+  editorFrame.onload = function () {
+    try{
+      editorFrame.contentWindow.task.subscribe(addItemToListFrame);
+    } catch(e) {
+      console.error("Error loading Editor MFE");
+    }
+  }
+
+  // Subscribe to the List MFE
+  listFrame.onload = function () {
+    try{
+      listFrame.contentWindow.onTodoClick(loadTodoFromList);
+    } catch(e){
+      console.error("Error loading List MFE");
+    }
+  }
+
+  // Sends a note to be displayed in the List MFE
+  function addItemToListFrame(item) {
+    listFrame.contentWindow.updateTodoElement(item.get());
+    listFrame.contentWindow.refreshTodoList();
+  }
+
+  // Sends a note to be displayed in the Editor MFE
+  function loadTodoFromList(item) {
+    editorFrame.contentWindow.task.set(item);
+  }
+
+</script>
+
+</html>

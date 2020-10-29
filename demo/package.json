@@ -5,11 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx http-server"
+    "start": "http-server public"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^0.12.3"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2"
   }
 }

@@ -1,0 +1,15 @@
+body{
+  font-family: sans-serif;
+  border: 1px solid #888888;
+  box-shadow: 5px 10px #888888;
+}
+
+ul {
+  list-style: none;
+  padding: 0 5px;
+}
+
+ul li:hover{
+  font-weight: bold;
+  cursor: pointer;  
+}

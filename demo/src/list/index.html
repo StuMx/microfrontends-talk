@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>To Do List</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <ul></ul>
+</body>
+
+<script>
+  // The team decided that the best place to store the data is the List component and
+  // keep a list of subscribers to notify when a ToDo element is clicked.
+  //
+  // Please note that this code is written to represent different coding styles.
+
+  var _todoList = [{ title: "Demo element", description: "Demo description" }];
+  var clickSubscribers = [];
+
+  window.onload = function () { refreshTodoList(); };
+
+  /* 
+   * A function to update a single element in the _todoList 
+   * It uses the ToDo title as key so some issues are expected.
+   */
+  function updateTodoElement(todo) {
+    indexToUpdate = _todoList.map(function (element) { return element.title }).indexOf(todo.title);
+    if (indexToUpdate >= 0) {
+      _todoList[indexToUpdate] = todo;
+    } else {
+      _todoList.push(todo);
+    }
+  }
+
+  /*
+   * Clears the list from the DOM and then draws it again
+   */
+  function refreshTodoList() {
+    var listRootElement = document.querySelector("ul");
+    listRootElement.innerHTML = "";
+    _todoList.forEach(function (todo) {
+      var li = document.createElement("li");
+      li.innerText = todo.title;
+      li.addEventListener("click", onLiClick);
+      listRootElement.appendChild(li);
+    });
+  }
+
+  /*
+   * Registers a callback to be executed whenever a ToDo element is clicked
+   * This function is meant to be called by another MFE.
+   */
+  function onTodoClick(cb) {
+    clickSubscribers.push(cb);
+  }
+
+  /*
+   * Recovers the details of the clicked note and sends them to the each callback
+   * registered in the clickSubscribers array.
+   */
+  function onLiClick(e) {
+    clickedTodo = _todoList.find(function (todo) {
+      return e.target.innerText == todo.title;
+    });
+    clickSubscribers.forEach(function (cbFunction) {
+      cbFunction(clickedTodo);
+    });
+  }
+</script>
+
+</html>
